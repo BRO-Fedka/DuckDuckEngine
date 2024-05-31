@@ -4,11 +4,29 @@ import keyboard
 from duck import *
 from engine import *
 import keyboard as kb
-MOVE_POWER = 10
+MOVE_POWER = 50
+JUMP_POWER = 5000
+def on_motion(e,game):
+    if game.mouse_hold[2]:
+        game.cameras["Player"].target_dir += e.rel[0]/2
+        game.cameras["Player"].target_vert_dir -= e.rel[1] / 2
+        if game.cameras["Player"].target_vert_dir < 0: game.cameras["Player"].target_vert_dir = 0
+        if game.cameras["Player"].target_vert_dir > 75: game.cameras["Player"].target_vert_dir = 75
+
+    # if e.buttons == 4:
+    #     game.cameras["Player"].target_zoom /= 1.1
+    # elif e. buttons == 5:
+    #     game.cameras["Player"].target_zoom *= 1.1
+def jump(e,game):
+    if game.objects["Duck"].z == 0:
+        game.objects["Duck"].gravity_object.Fres = JUMP_POWER
+    # print("KOKF")
 def setup(game):
+    keyboard.on_press_key('space',lambda e: jump(e,game))
+    game.on_motion = on_motion
     game.bg_color = (128,255,128)
     game.stages["World"] = World(game)
-    game.cameras["Player"] = Camera(game.stages["World"],0,0,0)
+    game.cameras["Player"] = Camera(game.stages["World"],0,0,0,0)
     game.objects["Duck"] = Duck(game.stages["World"], 0, 0, 0, "Duck")
     game.cameras["Player"].tracked_object = game.objects["Duck"]
     game.i_active_camera = "Player"
@@ -21,6 +39,9 @@ def setup(game):
     game.objects["Point1_"] = Point(game.stages["World"],-100, -100,100)
     game.objects["Point2_"] = Point(game.stages["World"],100,-100,100)
     game.objects["Point3_"] = Point(game.stages["World"],-100, 100,100)
+    game.objects["Poly0"] = SquarePolygon(game.stages["World"],game.objects["Point0"],game.objects["Point2"],game.objects["Point1_"],game.objects["Point3_"], (0,0,255))
+    game.objects["Poly1"] = SquarePolygon(game.stages["World"], game.objects["Point0"], game.objects["Point2"],
+                                         game.objects["Point2_"], game.objects["Point0_"], (0, 0, 255))
     game.objects["Line02"] = Line(game.stages["World"], game.objects["Point0"], game.objects["Point2"],(200,200,200),20)
     game.objects["Line13"] = aLine(game.stages["World"], game.objects["Point1"], game.objects["Point3"])
     game.objects["Line30"] = aLine(game.stages["World"], game.objects["Point3"], game.objects["Point0"])
@@ -38,42 +59,35 @@ def loop(game):
     kp_y= 0
     kp_x = 0
     k_vector = Vector2D(0,0)
-    if keyboard.is_pressed("w"):
-        kp_y += 1
-        k_vector = k_vector - Vector2D(-game.cameras["Player"].surf_cos,game.cameras["Player"].surf_sin)*MOVE_POWER
-    if keyboard.is_pressed("s"):
-        kp_y += 1
-        k_vector = k_vector + Vector2D(-game.cameras["Player"].surf_cos,game.cameras["Player"].surf_sin)*MOVE_POWER
-    if keyboard.is_pressed("a"):
-        kp_x += 1
-        k_vector = k_vector + Vector2D(game.cameras["Player"].surf_sin,game.cameras["Player"].surf_cos)*MOVE_POWER
-    if keyboard.is_pressed("d"):
-        kp_x += 1
-        k_vector = k_vector - Vector2D(game.cameras["Player"].surf_sin,game.cameras["Player"].surf_cos)*MOVE_POWER
-    mx,my = pg.mouse.get_pos()
+    # if keyboard.is_pressed("space"):
 
-    game.objects["Duck"].dir = -game.cameras["Player"].dir + lookat((mx-game.w/2),(my-game.h/2)/game.cameras["Player"].vert_cos)+90
-    if kp_y == 1 and kp_x == 1:
+    mx,my = pg.mouse.get_pos()
+    dx,dy = mx-game.w/2,my-game.h/2
+    if math.sqrt(dx**2+dy**2) > 100:
+        game.objects["Duck"].dinamic_object.Fres = game.objects["Duck"].dinamic_object.Fres + Vector2D(math.sin((-game.objects["Duck"].dir+90)/180*math.pi),math.cos((-game.objects["Duck"].dir+90)/180*math.pi))*MOVE_POWER
+    game.objects["Duck"].dir = -game.cameras["Player"].dir + lookat(dx,dy/game.cameras["Player"].vert_cos)+90
+    # if kp_y == 1 and kp_x == 1:
 
         # print("DF")
         # print(k_vector)
-        k_vector = k_vector / (2**0.5)
+        # k_vector = k_vector / (2**0.5)
 
-    game.objects["Duck"].dinamic_object.Fres = game.objects["Duck"].dinamic_object.Fres + k_vector
-    if keyboard.is_pressed("left"):
-        game.cameras["Player"].target_dir+= 1
-    if keyboard.is_pressed("right"):
-        game.cameras["Player"].target_dir -= 1
-    if keyboard.is_pressed("down"):
-        game.cameras["Player"].target_vert_dir+= 1
-    if keyboard.is_pressed("up"):
-        game.cameras["Player"].target_vert_dir -= 1
-    if keyboard.is_pressed("+"):
-        game.cameras["Player"].zoom*= 1.1
-    if keyboard.is_pressed("-"):
-        game.cameras["Player"].zoom /= 1.1
+
+    # if keyboard.is_pressed("left"):
+    #     game.cameras["Player"].target_dir+= 1
+    # if keyboard.is_pressed("right"):
+    #     game.cameras["Player"].target_dir -= 1
+    # if keyboard.is_pressed("down"):
+    #     game.cameras["Player"].target_vert_dir+= 1
+    # if keyboard.is_pressed("up"):
+    #     game.cameras["Player"].target_vert_dir -= 1
+    if game.mouse_hold[4]:
+        game.cameras["Player"].target_zoom*= 1.1
+    if game.mouse_hold[5]:
+        game.cameras["Player"].target_zoom /= 1.1
 
 
 
 if __name__ == '__main__':
     game = Game(setup,loop)
+
