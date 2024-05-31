@@ -81,9 +81,9 @@ def loop(game):
     #     game.cameras["Player"].target_vert_dir+= 1
     # if keyboard.is_pressed("up"):
     #     game.cameras["Player"].target_vert_dir -= 1
-    if game.mouse_hold[4]:
+    if game.mouse_hold[4] or keyboard.is_pressed("w"):
         game.cameras["Player"].target_zoom*= 1.1
-    if game.mouse_hold[5]:
+    if game.mouse_hold[5] or keyboard.is_pressed("s"):
         game.cameras["Player"].target_zoom /= 1.1
 
 
