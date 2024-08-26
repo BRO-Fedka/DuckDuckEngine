@@ -16,7 +16,6 @@ class Circle:
         dy = (self.world.camera.y - self.y)
         sin = math.sin(self.world.camera.dir / 180 * math.pi)
         cos = math.cos(self.world.camera.dir / 180 * math.pi)
-        # +(poly[_][1]*cos*320)+(poly[_][0]*320*sin)  | +(poly[_][1]*sin*320)-(poly[_][0]*cos*320)
         return (self.world.game.w / 2 + (dy * cos + sin * dx) * self.world.camera.zoom + offset_x,
                 self.world.game.h / 2 + (
                             - dy * sin * self.world.camera.vert_cos + cos * dx * self.world.camera.vert_cos - (

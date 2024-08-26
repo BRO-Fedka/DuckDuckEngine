@@ -2,7 +2,6 @@ import keyboard
 from engine import *
 from game.duck import *
 
-
 MOVE_POWER = 50
 JUMP_POWER = 5000
 
@@ -14,10 +13,10 @@ def on_motion(e, game):
         if game.cameras["Player"].target_vert_dir < 0: game.cameras["Player"].target_vert_dir = 0
         if game.cameras["Player"].target_vert_dir > 75: game.cameras["Player"].target_vert_dir = 75
 
-    # if e.buttons == 4:
-    #     game.cameras["Player"].target_zoom /= 1.1
-    # elif e. buttons == 5:
-    #     game.cameras["Player"].target_zoom *= 1.1
+    if e.buttons == 4:
+        game.cameras["Player"].target_zoom /= 1.1
+    elif e.buttons == 5:
+        game.cameras["Player"].target_zoom *= 1.1
 
 
 def jump(e, game):
@@ -72,7 +71,7 @@ def loop(game):
     # if keyboard.is_pressed("space"):
 
     mx, my = pygame.mouse.get_pos()
-    dx, dy = mx - game.w / 2, my - game.h / 2
+    dx, dy = mx - game.rw / 2, my - game.rh / 2
     if math.sqrt(dx ** 2 + dy ** 2) > 100:
         game.objects["Duck"].dinamic_object.Fres = game.objects["Duck"].dinamic_object.Fres + Vector2D(
             math.sin((-game.objects["Duck"].dir + 90) / 180 * math.pi),

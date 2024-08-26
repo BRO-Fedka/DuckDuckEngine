@@ -1,6 +1,7 @@
 import math
 import pygame
 from engine.geometry.Point import Point
+from engine.functions.lookat import lookat
 
 
 class Line:
@@ -12,10 +13,12 @@ class Line:
         self.cl = color
 
     def draw(self):
-        # deg = lookat(self.p2.calc_scr_pos()[0]-self.p1.calc_scr_pos()[0],self.p2.calc_scr_pos()[1]-self.p1.calc_scr_pos()[1])
-        # cossin = abs(math.cos(deg/180*math.pi))+abs(math.sin(deg/180*math.pi))
+        deg = lookat(self.p2.calc_scr_pos()[0]-self.p1.calc_scr_pos()[0],self.p2.calc_scr_pos()[1]-self.p1.calc_scr_pos()[1])
+        cossin = abs(math.cos(deg/180*math.pi))+abs(math.sin(deg/180*math.pi))
         pygame.draw.line(self.world.game.screen, self.cl, self.p1.calc_scr_pos(), self.p2.calc_scr_pos(),
-                     math.ceil(self.w * self.world.camera.zoom))  # w * cossin
+                     math.ceil(self.w * self.world.camera.zoom))
+        # pygame.draw.line(self.world.game.screen, self.cl, self.p1.calc_scr_pos(), self.p2.calc_scr_pos(),
+        #              math.ceil(self.w * cossin * self.world.camera.zoom))
         pygame.draw.circle(self.world.game.screen, self.cl, self.p1.calc_scr_pos(1, 1),
                        math.ceil(self.w / 2 * self.world.camera.zoom))
         pygame.draw.circle(self.world.game.screen, self.cl, self.p2.calc_scr_pos(1, 1),

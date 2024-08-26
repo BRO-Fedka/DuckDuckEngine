@@ -8,11 +8,15 @@ class Game:
     def __init__(self, setup, loop):
         self.FPS = 60
         pygame.init()
-        self.w = 1500
-        self.h = 1000
+        self.pix_size = 1
+        self.rw = 1920
+        self.rh = 1080
+        self.w = int(self.rw/self.pix_size)
+        self.h = int(self.rh/self.pix_size)
         self.on_motion = self.empty
         self.bg_color = (0, 0, 0)
-        self.screen = pygame.display.set_mode((self.w, self.h))
+        self.win = pygame.display.set_mode((self.rw, self.rh),pygame.FULLSCREEN)
+        self.screen = pygame.Surface((self.w, self.h))
         self.clock = pygame.time.Clock()
         self.__vars = {}
         self.cameras = {}
@@ -31,6 +35,7 @@ class Game:
             self.stages[self.i_active_stage].update()
             self.update()
             self.draw()
+            self.win.blit(pygame.transform.scale(self.screen, self.win.get_rect().size), (0, 0))
             self.mouse_hold[4] = False
             self.mouse_hold[5] = False
             for i in pygame.event.get():
