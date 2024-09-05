@@ -1,8 +1,9 @@
 from engine.geometry.Point import Point
 import pygame
+from engine.geometry.Base import Base
 
 
-class aLine:
+class aLine(Base):
     def __init__(self, world, p1, p2):
         self.p1 = p1
         self.p2 = p2

@@ -1,9 +1,13 @@
 from engine.geometry.Point import Point
 from engine.base.Vector3D import Vector3D
 import pygame
+from typing import List
+from engine.geometry.Base import Base
 
 
-class SquarePolygon:
+class SquarePolygon(Base):
+    instances: List = []
+
     def __init__(self, world, p1, p2, p3, p4, color):
         self.p1 = p1
         self.p2 = p2
@@ -11,6 +15,7 @@ class SquarePolygon:
         self.p4 = p4
         self.world = world
         self.cl = color
+        self.instances.append(self)
 
     def draw(self):
         def take0(val):

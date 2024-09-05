@@ -1,8 +1,9 @@
 import math
 import pygame
+from engine.geometry.Base import Base
 
 
-class Point:
+class Point(Base):
     def __init__(self, world, x, y, z, visible=False):
         self.world = world
         self.x = x

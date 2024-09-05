@@ -1,8 +1,9 @@
 import pygame
 import math
+from engine.geometry.Base import Base
 
 
-class Circle:
+class Circle(Base):
     def __init__(self, world, x, y, z, color=(255, 0, 0), r=1):
         self.world = world
         self.x = x

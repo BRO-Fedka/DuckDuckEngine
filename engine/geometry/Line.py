@@ -2,9 +2,10 @@ import math
 import pygame
 from engine.geometry.Point import Point
 from engine.functions.lookat import lookat
+from engine.geometry.Base import Base
 
 
-class Line:
+class Line(Base):
     def __init__(self, world, p1, p2, color=(255, 0, 0), width=3):
         self.p1 = p1
         self.p2 = p2
